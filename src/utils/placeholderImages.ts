@@ -12,10 +12,10 @@ export const heroImages = {
 // Product images
 export const productImages = {
   coffee1: 'https://static.vecteezy.com/system/resources/thumbnails/025/282/026/small/stock-of-mix-a-cup-coffee-latte-more-motive-top-view-foodgraphy-generative-ai-photo.jpg',
-  coffee2: 'https://images.unsplash.com/photo-1565600583458-6ba3dc5a7c2b',
-  coffee3: 'https://images.unsplash.com/photo-1572286258217-215f6d8bb578',
+  coffee2: 'https://i.ebayimg.com/images/g/rqgAAOSwCplfHj8O/s-l1200.jpg',
+  coffee3: 'https://kruticoffee.com/cdn/shop/files/Premium_Coffees_900x.png?v=1744692733',
   merchandise1: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d',
-  merchandise2: 'https://images.unsplash.com/photo-1577937927133-3b0a0fe6df18',
+  merchandise2: 'https://www.thewalletstore.in/cdn/shop/files/Tamil---Priya_9e311433-cef2-4334-b4b5-79126bcfa19e.jpg?v=1684302439',
   equipment1: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG6MtOAJkyImBVlNiG2ll3gR3m7ZYMcrG-vw&s',
   equipment2: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085',
 };

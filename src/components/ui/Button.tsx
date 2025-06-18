@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { ButtonHTMLAttributes } from 'react';
-import { motion } from 'framer-motion';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -37,8 +36,7 @@ const Button = ({
   const widthClass = fullWidth ? 'w-full' : '';
   
   return (
-    <motion.button
-      whileTap={{ scale: 0.98 }}
+    <button
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClass} ${className}`}
       disabled={isLoading || props.disabled}
       {...props}
@@ -54,7 +52,7 @@ const Button = ({
       ) : (
         children
       )}
-    </motion.button>
+    </button>
   );
 };
 

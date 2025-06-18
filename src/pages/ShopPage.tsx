@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ProductCard from '../components/ui/ProductCard';
 import { heroImages, productImages, getPlaceholderImage } from '../utils/placeholderImages';
@@ -9,7 +9,7 @@ const shopProducts = [
     id: '1',
     name: 'Signature Blend Coffee',
     description: 'Our signature blend with notes of chocolate, caramel, and a hint of citrus.',
-    price: 14.99,
+    price: 1299,
     image: getPlaceholderImage(productImages.coffee1),
     category: 'Coffee Beans',
     isNew: false,
@@ -19,7 +19,7 @@ const shopProducts = [
     id: '2',
     name: 'Moobucks Tumbler',
     description: 'Double-walled stainless steel tumbler with our iconic logo.',
-    price: 24.99,
+    price: 1799,
     image: getPlaceholderImage(productImages.merchandise1),
     category: 'Merchandise',
     isNew: true,
@@ -29,7 +29,7 @@ const shopProducts = [
     id: '3',
     name: 'Cold Brew Kit',
     description: 'Everything you need to make perfect cold brew coffee at home.',
-    price: 29.99,
+    price: 2499,
     image: getPlaceholderImage(productImages.equipment1),
     category: 'Brewing Equipment',
     isNew: false,
@@ -39,7 +39,7 @@ const shopProducts = [
     id: '4',
     name: 'Ethiopian Single Origin',
     description: 'Bright and fruity with notes of blueberry and citrus. A light roast perfect for pour-over.',
-    price: 16.99,
+    price: 1499,
     image: getPlaceholderImage(productImages.coffee2),
     category: 'Coffee Beans',
     isNew: true,
@@ -49,7 +49,7 @@ const shopProducts = [
     id: '5',
     name: 'Ceramic Pour-Over Set',
     description: 'Handcrafted ceramic pour-over dripper with matching mug. Elegant and functional.',
-    price: 34.99,
+    price: 2999,
     image: getPlaceholderImage(productImages.equipment2),
     category: 'Brewing Equipment',
     isNew: false,
@@ -59,7 +59,7 @@ const shopProducts = [
     id: '6',
     name: 'Moobucks Travel Mug',
     description: 'Leak-proof travel mug with temperature control technology. Keeps drinks hot for 12 hours.',
-    price: 19.99,
+    price: 1599,
     image: getPlaceholderImage(productImages.merchandise2),
     category: 'Merchandise',
     isNew: true,
@@ -69,7 +69,7 @@ const shopProducts = [
     id: '7',
     name: 'Dark Roast Espresso Blend',
     description: 'Bold and rich with notes of dark chocolate and caramel. Perfect for espresso machines.',
-    price: 15.99,
+    price: 1099,
     image: getPlaceholderImage(productImages.coffee3),
     category: 'Coffee Beans',
     isNew: false,
@@ -79,7 +79,7 @@ const shopProducts = [
     id: '8',
     name: 'Moobucks Coffee Mug',
     description: 'Classic ceramic mug with our iconic logo. Perfect for your morning coffee ritual.',
-    price: 12.99,
+    price: 999,
     image: getPlaceholderImage(productImages.merchandise1),
     category: 'Merchandise',
     isNew: false,
@@ -89,7 +89,7 @@ const shopProducts = [
     id: '9',
     name: 'French Press',
     description: 'Classic stainless steel French press for a rich and full-bodied brew.',
-    price: 27.99,
+    price: 1999,
     image: getPlaceholderImage(productImages.equipment2),
     category: 'Brewing Equipment',
     isNew: false,
@@ -106,6 +106,9 @@ const categories = [
 ];
 
 const ShopPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 

@@ -20,7 +20,7 @@ interface LocationCardProps {
 }
 
 const LocationCard = ({
-  id,
+  // id is used as a key elsewhere
   name,
   address,
   city,

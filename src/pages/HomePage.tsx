@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import ProductCard from '../components/ui/ProductCard';
 import { heroImages, productImages, storyImages, locationImages, getPlaceholderImage } from '../utils/placeholderImages';
+import { useEffect } from 'react';
 
-// Sample featured products data
 const featuredProducts = [ 
   {
     id: '1',
     name: 'Signature Blend Coffee',
     description: 'Our signature blend with notes of chocolate, caramel, and a hint of citrus.',
-    price: 14.99,
+    price: 1299,
     image: getPlaceholderImage(productImages.coffee1),
     category: 'Coffee Beans',
     isNew: false,
@@ -20,7 +20,7 @@ const featuredProducts = [
     id: '2',
     name: 'Moobucks Tumbler',
     description: 'Double-walled stainless steel tumbler with our iconic logo.',
-    price: 24.99,
+    price: 1799,
     image: getPlaceholderImage(productImages.merchandise1),
     category: 'Merchandise',
     isNew: true,
@@ -30,18 +30,17 @@ const featuredProducts = [
     id: '3',
     name: 'Cold Brew Kit',
     description: 'Everything you need to make perfect cold brew coffee at home.',
-    price: 29.99,
+    price: 2499,
     image: getPlaceholderImage(productImages.equipment1),
     category: 'Brewing Equipment',
     isNew: false,
     isFeatured: true,
   },
-  // New products added below
   {
     id: '4',
     name: 'Ethiopian Single Origin',
     description: 'Bright and fruity with notes of blueberry and citrus. A light roast perfect for pour-over.',
-    price: 16.99,
+    price: 1499,
     image: getPlaceholderImage(productImages.coffee2),
     category: 'Coffee Beans',
     isNew: true,
@@ -51,7 +50,7 @@ const featuredProducts = [
     id: '5',
     name: 'Ceramic Pour-Over Set',
     description: 'Handcrafted ceramic pour-over dripper with matching mug. Elegant and functional.',
-    price: 34.99,
+    price: 2999,
     image: getPlaceholderImage(productImages.equipment2),
     category: 'Brewing Equipment',
     isNew: false,
@@ -61,7 +60,7 @@ const featuredProducts = [
     id: '6',
     name: 'Moobucks Travel Mug',
     description: 'Leak-proof travel mug with temperature control technology. Keeps drinks hot for 12 hours.',
-    price: 19.99,
+    price: 1599,
     image: getPlaceholderImage(productImages.merchandise2),
     category: 'Merchandise',
     isNew: true,
@@ -70,6 +69,9 @@ const featuredProducts = [
 ];
 
 const HomePage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div>
       
@@ -118,7 +120,46 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* About Section */}
+      {/* Featured Products Section */}
+      <section className="section-padding">
+        <div className="container-custom">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl font-bold text-moobucks-dark mb-4">Featured Products</h2>
+            <p className="text-gray-700 max-w-2xl mx-auto">
+              Discover our handpicked selection of premium coffee beans, brewing equipment, and merchandise to enhance your coffee experience.
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredProducts.map((product) => (
+              <ProductCard 
+                key={product.id}
+                {...product}
+              />
+            ))}
+          </div>
+          
+          <motion.div 
+            className="text-center mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <Link to="/shop">
+              <Button variant="secondary">
+                View All Products
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
       <section className="section-padding bg-moobucks-cream">
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -175,47 +216,6 @@ const HomePage = () => {
               </motion.div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Featured Products Section */}
-      <section className="section-padding">
-        <div className="container-custom">
-          <motion.div 
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl font-bold text-moobucks-dark mb-4">Featured Products</h2>
-            <p className="text-gray-700 max-w-2xl mx-auto">
-              Discover our handpicked selection of premium coffee beans, brewing equipment, and merchandise to enhance your coffee experience.
-            </p>
-          </motion.div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map((product, index) => (
-              <ProductCard 
-                key={product.id}
-                {...product}
-              />
-            ))}
-          </div>
-          
-          <motion.div 
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <Link to="/shop">
-              <Button variant="secondary">
-                View All Products
-              </Button>
-            </Link>
-          </motion.div>
         </div>
       </section>
 

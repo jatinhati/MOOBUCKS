@@ -16,7 +16,7 @@ const navigation = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const [cartCount, _setCartCount] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -25,8 +25,9 @@ const ProductCard = ({
   return (
     <motion.div 
       className="product-card"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20, scale: 1 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      whileHover={{ scale: 1.07 }}
       transition={{ duration: 0.3 }}
     >
       <Link to={`/shop/product/${id}`}>
@@ -52,7 +53,7 @@ const ProductCard = ({
           <h3 className="text-lg font-bold text-gray-900 mb-1">{name}</h3>
           <p className="text-gray-600 text-sm mb-2 line-clamp-2">{description}</p>
           <div className="flex justify-between items-center">
-            <span className="text-moobucks-green font-bold">${price.toFixed(2)}</span>
+            <span className="text-moobucks-green font-bold">₹{price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
             <button 
               className="bg-moobucks-green hover:bg-moobucks-dark text-white text-sm font-medium px-3 py-1 rounded transition-colors"
               onClick={(e) => {

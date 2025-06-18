@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { heroImages, storyImages, teamImages, getPlaceholderImage } from '../utils/placeholderImages';
+import { heroImages, storyImages, getPlaceholderImage } from '../utils/placeholderImages';
+import { useEffect } from 'react';
 
 const timelineEvents = [
   {
@@ -35,6 +36,9 @@ const timelineEvents = [
 ];
 
 const OurStoryPage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div>
       {/* Hero Section */}
@@ -95,7 +99,7 @@ const OurStoryPage = () => {
               transition={{ duration: 0.5 }}
             >
               <img 
-                src="https://images.squarespace-cdn.com/content/v1/583656d9f7e0abfee6c932a5/1494257139378-VXFF8VE8FXQLXXXITU9W/image-asset.jpeg" 
+                src="https://img.freepik.com/premium-photo/coffee-shop-with-unique-atmosphere_328432-22416.jpg?semt=ais_hybrid&w=740" 
                 alt="Our Mission" 
                 className="rounded-lg shadow-xl w-full"
               />
