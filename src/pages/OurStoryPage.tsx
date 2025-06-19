@@ -40,7 +40,7 @@ const OurStoryPage = () => {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div>
+    <div className="pt-16">
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">

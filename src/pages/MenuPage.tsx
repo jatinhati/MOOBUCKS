@@ -1,152 +1,183 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import MenuItemCard from '../components/ui/MenuItemCard';
+import ProductCard from '../components/ui/ProductCard';
+import { heroImages, menuImages, getPlaceholderImage } from '../utils/placeholderImages';
+import { useCart } from '../context/CartContext';
 
-// Sample menu data
-const menuCategories = [
-  { id: 'hot-coffee', name: 'Hot Coffee' },
-  { id: 'cold-coffee', name: 'Cold Coffee' },
-  { id: 'tea', name: 'Tea' },
-  { id: 'pastries', name: 'Pastries & Snacks' },
-  { id: 'seasonal', name: 'Seasonal Specials' },
-];
-
+// Menu items data
 const menuItems = [
   {
     id: '1',
-    name: 'Classic Moobucks Latte',
-    description: 'Our signature espresso with steamed milk and a light layer of foam. Available in various flavors.',
-    price: 4.25,
-    image: '/src/assets/images/menu-latte.jpg',
-    category: 'hot-coffee',
-    isPopular: true,
-    allergens: ['Milk'],
+    name: 'Signature Moobucks Latte',
+    description: 'Our signature espresso blend with steamed milk and our secret vanilla syrup.',
+    price: 450,
+    image: getPlaceholderImage(menuImages.hotCoffee1),
+    category: 'Coffee Drinks',
+    isNew: false,
+    isFeatured: true,
   },
   {
     id: '2',
     name: 'Caramel Macchiato',
-    description: 'Espresso with vanilla-flavored syrup, steamed milk, and caramel drizzle.',
-    price: 4.75,
-    image: '/src/assets/images/menu-macchiato.jpg',
-    category: 'hot-coffee',
-    isPopular: true,
-    allergens: ['Milk'],
+    description: 'Rich espresso with vanilla syrup, steamed milk, and caramel drizzle.',
+    price: 520,
+    image: getPlaceholderImage(menuImages.hotCoffee2),
+    category: 'Coffee Drinks',
+    isNew: true,
+    isFeatured: true,
   },
   {
     id: '3',
-    name: 'Americano',
-    description: 'Espresso shots topped with hot water to produce a light layer of crema.',
-    price: 3.25,
-    image: '/src/assets/images/menu-americano.jpg',
-    category: 'hot-coffee',
-    allergens: [],
+    name: 'Iced Cold Brew',
+    description: 'Smooth cold brew coffee served over ice with your choice of milk.',
+    price: 380,
+    image: getPlaceholderImage(menuImages.coldCoffee1),
+    category: 'Cold Beverages',
+    isNew: false,
+    isFeatured: true,
   },
   {
     id: '4',
-    name: 'Cold Brew',
-    description: 'Coffee grounds steeped in cold water for 20 hours to create a smooth, rich flavor.',
-    price: 3.95,
-    image: '/src/assets/images/menu-coldbrew.jpg',
-    category: 'cold-coffee',
-    isPopular: true,
-    allergens: [],
+    name: 'Mocha Frappé',
+    description: 'Blended coffee with chocolate syrup, milk, and whipped cream.',
+    price: 490,
+    image: getPlaceholderImage(menuImages.coldCoffee2),
+    category: 'Cold Beverages',
+    isNew: true,
+    isFeatured: true,
   },
   {
     id: '5',
-    name: 'Iced Caramel Latte',
-    description: 'Our signature espresso over ice with milk and caramel syrup.',
-    price: 4.50,
-    image: '/src/assets/images/menu-icedlatte.jpg',
-    category: 'cold-coffee',
-    allergens: ['Milk'],
+    name: 'Croissant Sandwich',
+    description: 'Buttery croissant with scrambled eggs, cheese, and your choice of ham or bacon.',
+    price: 650,
+    image: getPlaceholderImage(menuImages.pastry1),
+    category: 'Food',
+    isNew: false,
+    isFeatured: true,
   },
   {
     id: '6',
-    name: 'Moobucks Frappuccino',
-    description: 'Blended coffee with milk, ice, and your choice of flavors, topped with whipped cream.',
-    price: 5.25,
-    image: '/src/assets/images/menu-frappuccino.jpg',
-    category: 'cold-coffee',
-    isPopular: true,
-    allergens: ['Milk'],
+    name: 'Green Tea Latte',
+    description: 'Premium matcha powder with steamed milk and a touch of honey.',
+    price: 420,
+    image: getPlaceholderImage(menuImages.tea1),
+    category: 'Tea & Others',
+    isNew: true,
+    isFeatured: true,
   },
   {
     id: '7',
-    name: 'Chai Tea Latte',
-    description: 'Black tea infused with cinnamon, clove, and other warming spices combined with steamed milk.',
-    price: 4.25,
-    image: '/src/assets/images/menu-chai.jpg',
-    category: 'tea',
-    allergens: ['Milk'],
+    name: 'Classic Americano',
+    description: 'Rich espresso shots with hot water for a smooth, bold coffee experience.',
+    price: 320,
+    image: getPlaceholderImage(menuImages.hotCoffee1),
+    category: 'Coffee Drinks',
+    isNew: false,
+    isFeatured: false,
   },
   {
     id: '8',
-    name: 'Green Tea',
-    description: 'Pure green tea leaves steeped in hot water for a refreshing, delicate flavor.',
-    price: 2.95,
-    image: '/src/assets/images/menu-greentea.jpg',
-    category: 'tea',
-    allergens: [],
+    name: 'Blueberry Muffin',
+    description: 'Freshly baked muffin with juicy blueberries and a golden top.',
+    price: 280,
+    image: getPlaceholderImage(menuImages.pastry2),
+    category: 'Food',
+    isNew: false,
+    isFeatured: false,
   },
   {
     id: '9',
-    name: 'Butter Croissant',
-    description: 'Flaky, buttery layers make this classic croissant a perfect companion to your coffee.',
-    price: 2.95,
-    image: '/src/assets/images/menu-croissant.jpg',
-    category: 'pastries',
-    allergens: ['Wheat', 'Milk', 'Eggs'],
+    name: 'Chai Tea Latte',
+    description: 'Spiced black tea with steamed milk and a blend of aromatic spices.',
+    price: 400,
+    image: getPlaceholderImage(menuImages.tea2),
+    category: 'Tea & Others',
+    isNew: false,
+    isFeatured: false,
   },
   {
     id: '10',
-    name: 'Blueberry Muffin',
-    description: 'Moist muffin filled with juicy blueberries and topped with a sugar streusel.',
-    price: 3.25,
-    image: '/src/assets/images/menu-muffin.jpg',
-    category: 'pastries',
-    allergens: ['Wheat', 'Milk', 'Eggs'],
+    name: 'Vanilla Iced Coffee',
+    description: 'Cold brew coffee with vanilla syrup, milk, and ice.',
+    price: 360,
+    image: getPlaceholderImage(menuImages.coldCoffee1),
+    category: 'Cold Beverages',
+    isNew: false,
+    isFeatured: false,
   },
   {
     id: '11',
-    name: 'Pumpkin Spice Latte',
-    description: 'Our signature espresso with pumpkin spice syrup, steamed milk, and topped with whipped cream and pumpkin pie spices.',
-    price: 5.25,
-    image: '/src/assets/images/menu-psl.jpg',
-    category: 'seasonal',
+    name: 'Avocado Toast',
+    description: 'Artisanal bread topped with fresh avocado, cherry tomatoes, and a sprinkle of sea salt.',
+    price: 580,
+    image: getPlaceholderImage(menuImages.pastry1),
+    category: 'Food',
     isNew: true,
-    allergens: ['Milk'],
+    isFeatured: false,
   },
   {
     id: '12',
-    name: 'Peppermint Mocha',
-    description: 'Espresso with rich chocolate, peppermint syrup, steamed milk, and topped with whipped cream and chocolate curls.',
-    price: 5.25,
-    image: '/src/assets/images/menu-peppermint.jpg',
-    category: 'seasonal',
-    isNew: true,
-    allergens: ['Milk'],
+    name: 'Hot Chocolate',
+    description: 'Rich and creamy hot chocolate topped with whipped cream and marshmallows.',
+    price: 380,
+    image: getPlaceholderImage(menuImages.seasonal1),
+    category: 'Tea & Others',
+    isNew: false,
+    isFeatured: false,
   },
 ];
 
-const MenuPage = () => {
-  const [activeCategory, setActiveCategory] = useState('hot-coffee');
-  const [searchTerm, setSearchTerm] = useState('');
+// Menu categories
+const categories = [
+  { id: 'all', name: 'All Items' },
+  { id: 'Coffee Drinks', name: 'Coffee Drinks' },
+  { id: 'Cold Beverages', name: 'Cold Beverages' },
+  { id: 'Tea & Others', name: 'Tea & Others' },
+  { id: 'Food', name: 'Food' },
+];
 
+const MenuPage = () => {
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const { addToCart } = useCart();
+  const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Filter menu items based on category and search term
   const filteredItems = menuItems.filter((item) => {
     const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          item.description.toLowerCase().includes(searchTerm.toLowerCase());
+                         item.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
+  const handleAddToCart = (item) => {
+    addToCart(item);
+    setToast(`${item.name} added to cart!`);
+    setTimeout(() => setToast(null), 2000);
+  };
+
   return (
-    <div>
+    <div className="pt-16">
+      {toast && (
+        <div className="fixed bottom-8 left-1/2 z-50 w-fit max-w-xs flex items-center gap-3 bg-white text-moobucks-green px-6 py-4 rounded-xl shadow-2xl border border-moobucks-green animate-cute-toast font-semibold text-lg justify-center pointer-events-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <span>{toast}</span>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="/src/assets/images/menu-hero.jpg" 
-            alt="Our Menu" 
+            src={getPlaceholderImage(heroImages.shop)}
+            alt="Moobucks Menu" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -161,22 +192,22 @@ const MenuPage = () => {
             Our Menu
           </motion.h1>
           <motion.p 
-            className="text-lg md:text-xl max-w-2xl mx-auto"
+            className="text-lg md:text-xl mb-8 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Explore our handcrafted beverages and delicious food items
+            Discover our carefully crafted beverages and delicious food items, made with love and premium ingredients.
           </motion.p>
         </div>
       </section>
 
-      {/* Menu Section */}
-      <section className="section-padding">
-        <div className="container-custom">
+      {/* Menu Content */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-7xl">
           {/* Search and Filter */}
-          <div className="mb-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+          <div className="mb-12">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
               <div className="w-full md:w-1/3">
                 <input
                   type="text"
@@ -186,24 +217,13 @@ const MenuPage = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <div className="flex items-center">
-                <span className="text-gray-700 mr-2">Filter by:</span>
-                <button
-                  className={`px-3 py-1 rounded-md text-sm font-medium mr-2 ${
-                    activeCategory === 'all' 
-                      ? 'bg-moobucks-green text-white' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                  onClick={() => setActiveCategory('all')}
-                >
-                  All
-                </button>
-                {menuCategories.map((category) => (
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
                   <button
                     key={category.id}
-                    className={`px-3 py-1 rounded-md text-sm font-medium mr-2 ${
-                      activeCategory === category.id 
-                        ? 'bg-moobucks-green text-white' 
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                      activeCategory === category.id
+                        ? 'bg-moobucks-green text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                     onClick={() => setActiveCategory(category.id)}
@@ -215,228 +235,23 @@ const MenuPage = () => {
             </div>
           </div>
 
-          {/* Menu Items */}
-          <div className="space-y-6">
-            {filteredItems.length > 0 ? (
-              filteredItems.map((item) => (
-                <MenuItemCard 
+          {/* Menu Items Grid */}
+          {filteredItems.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredItems.map((item) => (
+                <ProductCard 
                   key={item.id}
                   {...item}
+                  onAddToCart={() => handleAddToCart(item)}
                 />
-              ))
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No menu items found. Try adjusting your search.</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Nutrition & Allergen Information */}
-      <section className="section-padding bg-moobucks-cream">
-        <div className="container-custom">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold text-moobucks-dark mb-4 text-center">Nutrition & Allergen Information</h2>
-            <p className="text-gray-700 mb-6 text-center">
-              We're committed to providing you with detailed information about our menu items to help you make informed choices.
-            </p>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-moobucks-dark mb-4">Common Allergens</h3>
-              <p className="text-gray-700 mb-4">
-                Our menu items may contain or come into contact with the following allergens:
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-gray-100 p-3 rounded-md text-center">
-                  <span className="font-medium">Milk</span>
-                </div>
-                <div className="bg-gray-100 p-3 rounded-md text-center">
-                  <span className="font-medium">Eggs</span>
-                </div>
-                <div className="bg-gray-100 p-3 rounded-md text-center">
-                  <span className="font-medium">Wheat</span>
-                </div>
-                <div className="bg-gray-100 p-3 rounded-md text-center">
-                  <span className="font-medium">Soy</span>
-                </div>
-                <div className="bg-gray-100 p-3 rounded-md text-center">
-                  <span className="font-medium">Tree Nuts</span>
-                </div>
-                <div className="bg-gray-100 p-3 rounded-md text-center">
-                  <span className="font-medium">Peanuts</span>
-                </div>
-              </div>
-              
-              <p className="text-gray-700 mb-4">
-                For detailed nutrition information and allergen details for specific menu items, please ask our staff or visit our nutrition page.
-              </p>
-              
-              <div className="flex justify-center">
-                <button className="bg-moobucks-green hover:bg-moobucks-dark text-white font-medium py-2 px-4 rounded transition-colors">
-                  View Full Nutrition Guide
-                </button>
-              </div>
+              ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Customization Options */}
-      <section className="section-padding">
-        <div className="container-custom">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-moobucks-dark mb-4">Customize Your Drink</h2>
-            <p className="text-gray-700 max-w-2xl mx-auto">
-              Make your MOOBUCKS experience uniquely yours with our range of customization options.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-moobucks-dark mb-4">Milk Options</h3>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Whole Milk
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  2% Milk
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Nonfat Milk
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Almond Milk
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Oat Milk
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Coconut Milk
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Soy Milk
-                </li>
-              </ul>
+          ) : (
+            <div className="text-center py-12">
+              <h3 className="text-xl font-medium text-gray-700 mb-4">No menu items found</h3>
+              <p className="text-gray-500">Try adjusting your search or filter criteria</p>
             </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-moobucks-dark mb-4">Flavor Syrups</h3>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Vanilla
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Caramel
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Hazelnut
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Chocolate
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Cinnamon Dolce
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Toffee Nut
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Seasonal Flavors
-                </li>
-              </ul>
-            </div>
-            
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-moobucks-dark mb-4">Toppings & Extras</h3>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Whipped Cream
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Caramel Drizzle
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Chocolate Drizzle
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Cinnamon Powder
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Chocolate Curls
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Extra Espresso Shot
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-moobucks-green mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Sugar-Free Options
-                </li>
-              </ul>
-            </div>
-          </div>
+          )}
         </div>
       </section>
     </div>

@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import ProductCard from '../components/ui/ProductCard';
 import { heroImages, productImages, storyImages, locationImages, getPlaceholderImage } from '../utils/placeholderImages';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const featuredProducts = [ 
   {
@@ -69,13 +69,51 @@ const featuredProducts = [
 ];
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const [locating, setLocating] = useState(false);
+  const [locationError, setLocationError] = useState('');
+
+  const handleFindNearestLocation = () => {
+    setLocating(true);
+    setLocationError('');
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation is not supported by your browser.');
+      setLocating(false);
+      return;
+    }
+    let didRespond = false;
+    const timeout = setTimeout(() => {
+      if (!didRespond) {
+        setLocating(false);
+        setLocationError('Location request timed out. Please try again.');
+      }
+    }, 10000); // 10 seconds
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        didRespond = true;
+        clearTimeout(timeout);
+        const { latitude, longitude } = position.coords;
+        setLocating(false);
+        navigate(`/nearest-store?lat=${latitude}&lng=${longitude}`);
+      },
+      (err) => {
+        didRespond = true;
+        clearTimeout(timeout);
+        setLocating(false);
+        if (err.code === 1) {
+          setLocationError('Location permission denied. Please allow access and try again.');
+        } else {
+          setLocationError('Unable to retrieve your location.');
+        }
+      }
+    );
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   return (
     <div>
-      
-      
       <section className="hero-section">
         <img 
           className="hero-video"
@@ -106,17 +144,21 @@ const HomePage = () => {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link to="/locations">
-              <Button variant="primary" size="lg">
-                Find Your Nearest Coffee
-              </Button>
-            </Link>
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={handleFindNearestLocation}
+              disabled={locating}
+            >
+              {locating ? 'Locating...' : 'Find Your Nearest Coffee'}
+            </Button>
             <Link to="/menu">
               <Button variant="outline" size="lg" className="bg-black/30 border-grren  text-white">
                 Explore Our Menu
               </Button>
             </Link>
           </motion.div>
+          {locationError && <div className="mt-3 text-red-200 font-medium">{locationError}</div>}
         </div>
       </section>
 

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import React from 'react';
 
 interface ProductCardProps {
   id: string;
@@ -10,9 +10,10 @@ interface ProductCardProps {
   category: string;
   isNew?: boolean;
   isFeatured?: boolean;
+  onAddToCart?: () => void;
 }
 
-const ProductCard = ({
+const ProductCard = React.memo(({
   id,
   name,
   description,
@@ -21,21 +22,25 @@ const ProductCard = ({
   category,
   isNew = false,
   isFeatured = false,
+  onAddToCart,
 }: ProductCardProps) => {
   return (
     <motion.div 
       className="product-card"
-      initial={{ opacity: 0, y: 20, scale: 1 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
       whileHover={{ scale: 1.07 }}
       transition={{ duration: 0.3 }}
     >
-      <Link to={`/shop/product/${id}`}>
+      <div>
         <div className="relative">
           <img 
             src={image} 
             alt={name} 
             className="w-full h-64 object-cover"
+            loading="lazy"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = 'https://images.unsplash.com/photo-1509042239860-f550ce710b93';
+            }}
           />
           {isNew && (
             <div className="absolute top-2 right-2 bg-moobucks-gold text-white text-xs font-bold px-2 py-1 rounded">
@@ -55,20 +60,19 @@ const ProductCard = ({
           <div className="flex justify-between items-center">
             <span className="text-moobucks-green font-bold">₹{price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
             <button 
-              className="bg-moobucks-green hover:bg-moobucks-dark text-white text-sm font-medium px-3 py-1 rounded transition-colors"
+              className="bg-moobucks-green hover:bg-moobucks-dark text-white text-base font-bold px-6 py-2 rounded transition-colors"
               onClick={(e) => {
                 e.preventDefault();
-                // Add to cart functionality will be implemented later
-                console.log(`Added ${name} to cart`);
+                if (onAddToCart) onAddToCart();
               }}
             >
               Add to Cart
             </button>
           </div>
         </div>
-      </Link>
+      </div>
     </motion.div>
   );
-};
+});
 
 export default ProductCard;

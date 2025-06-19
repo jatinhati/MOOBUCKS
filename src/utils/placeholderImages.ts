@@ -22,7 +22,7 @@ export const productImages = {
 
 // Menu item images
 export const menuImages = {
-  hotCoffee1: 'https://images.unsplash.com/photo-1541167760496-1628856ab772',
+  hotCoffee1: 'https://img.freepik.com/free-photo/delicious-organic-coffee-still-life_23-2151762341.jpg?semt=ais_hybrid&w=740',
   hotCoffee2: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d',
   coldCoffee1: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc39',
   coldCoffee2: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735',

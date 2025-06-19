@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Bars3Icon, XMarkIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
+import { useCart } from '../../context/CartContext';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -16,13 +17,17 @@ const navigation = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [cartCount, _setCartCount] = useState(0);
+  const { cart } = useCart();
+  const cartCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled);
+      if (window.scrollY > 10) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
       }
     };
 
@@ -30,10 +35,10 @@ const Navbar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [scrolled]);
+  }, []);
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-moobucks-green' : 'bg-transparent'}`}>
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${isHomePage && !scrolled ? 'bg-transparent' : 'bg-moobucks-green'}`}>
       <div className="container-custom">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -44,7 +49,7 @@ const Navbar = () => {
                 src="/moobucks-logo.svg" 
                 alt="MOOBUCKS" 
               />
-              <span className={`ml-2 font-bold text-xl ${scrolled ? 'text-white' : 'text-white'}`}>
+              <span className="ml-2 font-bold text-xl text-white">
                 MOOBUCKS
               </span>
             </Link>
@@ -59,7 +64,7 @@ const Navbar = () => {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className="uppercase font-bold tracking-wide text-lg text-white hover:text-moobucks-green transition-colors flex items-center"
+                    className="uppercase font-bold tracking-wide text-lg text-white  transition-colors flex items-center"
                   >
                     {item.name}
                     {(item.name === 'SHOP' || item.name === 'CONTACT') && (
@@ -73,7 +78,7 @@ const Navbar = () => {
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke={scrolled ? "white" : "#6B4F36"}
+                    stroke="white"
                     strokeWidth={1.5}
                     width={28}
                     height={28}
@@ -86,7 +91,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center">
               <Link to="/cart" className="relative ml-4">
                 <ShoppingBagIcon 
-                  className={`h-6 w-6 ${scrolled ? 'text-moobucks-white' : 'text-white'}`} 
+                  className="h-6 w-6 text-white" 
                 />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-moobucks-gold text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
@@ -101,7 +106,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <Link to="/cart" className="relative mr-4">
               <ShoppingBagIcon 
-                className={`h-6 w-6 ${scrolled ? 'text-moobucks-green' : 'text-white'}`} 
+                className="h-6 w-6 text-white" 
               />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-moobucks-gold text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
@@ -111,11 +116,7 @@ const Navbar = () => {
             </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`inline-flex items-center justify-center p-2 rounded-md ${
-                scrolled 
-                  ? 'text-gray-700 hover:text-moobucks-green hover:bg-gray-100' 
-                  : 'text-white hover:text-white hover:bg-moobucks-dark'
-              }`}
+              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-moobucks-dark"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (

@@ -58,8 +58,8 @@ const Footer = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <span className="text-gray-300">
-                  123 Coffee Lane<br />
-                  Seattle, WA 98101
+                  123 park street<br />
+                  Kolkata, WB 700005
                 </span>
               </li>
               <li className="flex items-center">

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ProductCard from '../components/ui/ProductCard';
 import { heroImages, productImages, getPlaceholderImage } from '../utils/placeholderImages';
+import { useCart } from '../context/CartContext';
 
 // Shop products data
 const shopProducts = [
@@ -100,33 +101,46 @@ const shopProducts = [
 // Product categories
 const categories = [
   { id: 'all', name: 'All Products' },
-  { id: 'coffee-beans', name: 'Coffee Beans' },
-  { id: 'merchandise', name: 'Merchandise' },
-  { id: 'brewing-equipment', name: 'Brewing Equipment' },
+  { id: 'Coffee Beans', name: 'Coffee Beans' },
+  { id: 'Merchandise', name: 'Merchandise' },
+  { id: 'Brewing Equipment', name: 'Brewing Equipment' },
 ];
 
 const ShopPage = () => {
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const { addToCart } = useCart();
+  const [toast, setToast] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
 
   // Filter products based on category and search term
   const filteredProducts = shopProducts.filter((product) => {
-    const matchesCategory = activeCategory === 'all' || 
-                           (activeCategory === 'coffee-beans' && product.category === 'Coffee Beans') ||
-                           (activeCategory === 'merchandise' && product.category === 'Merchandise') ||
-                           (activeCategory === 'brewing-equipment' && product.category === 'Brewing Equipment');
-                           
+    const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
-                         
     return matchesCategory && matchesSearch;
   });
 
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    setToast(`${product.name} added to cart!`);
+    setTimeout(() => setToast(null), 2000);
+  };
+
   return (
-    <div>
+    <div className="pt-16">
+      {toast && (
+        <div className="fixed bottom-8 left-1/2 z-50 w-fit max-w-xs flex items-center gap-3 bg-white text-moobucks-green px-6 py-4 rounded-xl shadow-2xl border border-moobucks-green animate-cute-toast font-semibold text-lg justify-center pointer-events-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <span>{toast}</span>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
@@ -164,31 +178,13 @@ const ShopPage = () => {
           <div className="mb-12">
             <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
               <div className="w-full md:w-1/3">
-                <div className="flex">
-                  <input
-                    type="text"
-                    placeholder="Search products..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-moobucks-green"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        // Handle search when Enter key is pressed
-                        e.preventDefault();
-                      }
-                    }}
-                  />
-                  <button 
-                    className="bg-moobucks-green hover:bg-moobucks-dark text-white px-4 py-2 rounded-r-md transition-colors"
-                    onClick={() => {
-                      // Handle search button click
-                      // This is already handled by the onChange event on the input
-                      // which updates searchTerm state and filters products
-                    }}
-                  >
-                    Search
-                  </button>
-                </div>
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-moobucks-green"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
               <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
@@ -212,7 +208,11 @@ const ShopPage = () => {
           {filteredProducts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} {...product} />
+                <ProductCard 
+                  key={product.id}
+                  {...product}
+                  onAddToCart={() => handleAddToCart(product)}
+                />
               ))}
             </div>
           ) : (
