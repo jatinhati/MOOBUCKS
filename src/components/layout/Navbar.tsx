@@ -41,7 +41,7 @@ const Navbar = () => {
             <Link to="/" className="flex items-center">
               <img 
                 className="h-10 w-auto" 
-                src="/src/assets/images/moobucks-logo.svg" 
+                src="/src/assets/moobucks-logo.svg" 
                 alt="MOOBUCKS" 
               />
               <span className={`ml-2 font-bold text-xl ${scrolled ? 'text-white' : 'text-white'}`}>
