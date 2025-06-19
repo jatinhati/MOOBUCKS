@@ -110,7 +110,7 @@ const ShopPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const { addToCart } = useCart();
-  const [toast, setToast] = useState(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -124,7 +124,7 @@ const ShopPage = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product: any) => {
     addToCart(product);
     setToast(`${product.name} added to cart!`);
     setTimeout(() => setToast(null), 2000);

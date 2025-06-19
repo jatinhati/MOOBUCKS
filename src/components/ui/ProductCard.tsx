@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import React from 'react';
 
 interface ProductCardProps {
-  id: string;
   name: string;
   description: string;
   price: number;
@@ -14,7 +13,6 @@ interface ProductCardProps {
 }
 
 const ProductCard = React.memo(({
-  id,
   name,
   description,
   price,

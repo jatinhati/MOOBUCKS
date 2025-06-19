@@ -8,9 +8,7 @@ interface MenuItemCardProps {
   category: string;
   isNew?: boolean;
   isPopular?: boolean;
-  allergens?: string[];
   onAddToCart?: () => void;
-  imgLazy?: boolean;
 }
 
 const MenuItemCard = React.memo(({
@@ -21,9 +19,7 @@ const MenuItemCard = React.memo(({
   category,
   isNew = false,
   isPopular = false,
-  allergens = [],
   onAddToCart,
-  imgLazy = false,
 }: MenuItemCardProps) => {
   return (
     <div className="product-card shadow">

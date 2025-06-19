@@ -141,7 +141,7 @@ const MenuPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const { addToCart } = useCart();
-  const [toast, setToast] = useState(null);
+  const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -155,7 +155,7 @@ const MenuPage = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleAddToCart = (item) => {
+  const handleAddToCart = (item: any) => {
     addToCart(item);
     setToast(`${item.name} added to cart!`);
     setTimeout(() => setToast(null), 2000);
